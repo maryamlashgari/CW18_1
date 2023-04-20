@@ -38,25 +38,28 @@ namespace CW18_1.Migrations
 
             modelBuilder.Entity("CW18_1.Models.Address", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("MemberId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Addresss")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId")
-                        .IsUnique();
+                    b.HasKey("MemberId");
 
                     b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            MemberId = 1,
+                            Addresss = "Address1"
+                        },
+                        new
+                        {
+                            MemberId = 2,
+                            Addresss = "Address2"
+                        });
                 });
 
             modelBuilder.Entity("CW18_1.Models.Book", b =>
@@ -83,12 +86,6 @@ namespace CW18_1.Migrations
 
             modelBuilder.Entity("CW18_1.Models.City", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
@@ -99,14 +96,25 @@ namespace CW18_1.Migrations
                     b.Property<int>("StateId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId")
-                        .IsUnique();
+                    b.HasKey("AddressId");
 
                     b.HasIndex("StateId");
 
                     b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            AddressId = 1,
+                            Name = "City1",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            AddressId = 2,
+                            Name = "City2",
+                            StateId = 2
+                        });
                 });
 
             modelBuilder.Entity("CW18_1.Models.Member", b =>
@@ -128,6 +136,20 @@ namespace CW18_1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Members");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "FirstName1",
+                            LastName = "LastName1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "FirstName2",
+                            LastName = "LastName2"
+                        });
                 });
 
             modelBuilder.Entity("CW18_1.Models.State", b =>
@@ -145,6 +167,18 @@ namespace CW18_1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "State1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "State2"
+                        });
                 });
 
             modelBuilder.Entity("CW18_1.Models.Zhanr", b =>
@@ -162,6 +196,18 @@ namespace CW18_1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Zhanrs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "Zhanr1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "Zhanr2"
+                        });
                 });
 
             modelBuilder.Entity("BookMember", b =>

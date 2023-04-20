@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CW18_1.Migrations
 {
     /// <inheritdoc />
@@ -54,14 +56,12 @@ namespace CW18_1.Migrations
                 name: "Addresses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Addresss = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MemberId = table.Column<int>(type: "int", nullable: false)
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    Addresss = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_Addresses", x => x.MemberId);
                     table.ForeignKey(
                         name: "FK_Addresses_Members_MemberId",
                         column: x => x.MemberId,
@@ -94,20 +94,18 @@ namespace CW18_1.Migrations
                 name: "Cities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.AddressId);
                     table.ForeignKey(
                         name: "FK_Cities_Addresses_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Addresses",
-                        principalColumn: "Id",
+                        principalColumn: "MemberId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Cities_States_StateId",
@@ -141,11 +139,50 @@ namespace CW18_1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_MemberId",
+            migrationBuilder.InsertData(
+                table: "Members",
+                columns: new[] { "Id", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { 1, "FirstName1", "LastName1" },
+                    { 2, "FirstName2", "LastName2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "States",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "State1" },
+                    { 2, "State2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Zhanrs",
+                columns: new[] { "Id", "Title" },
+                values: new object[,]
+                {
+                    { 1, "Zhanr1" },
+                    { 2, "Zhanr2" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Addresses",
-                column: "MemberId",
-                unique: true);
+                columns: new[] { "MemberId", "Addresss" },
+                values: new object[,]
+                {
+                    { 1, "Address1" },
+                    { 2, "Address2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "AddressId", "Name", "StateId" },
+                values: new object[,]
+                {
+                    { 1, "City1", 1 },
+                    { 2, "City2", 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookMember_MembersId",
@@ -156,12 +193,6 @@ namespace CW18_1.Migrations
                 name: "IX_Books_ZhanrId",
                 table: "Books",
                 column: "ZhanrId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cities_AddressId",
-                table: "Cities",
-                column: "AddressId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_StateId",

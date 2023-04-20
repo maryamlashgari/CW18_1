@@ -10,6 +10,15 @@ namespace CW18_1.DAL
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new MemberEntityConfig());
+            modelBuilder.ApplyConfiguration(new StateEntityConfig());
+            modelBuilder.ApplyConfiguration(new AddressEntityConfig());
+            modelBuilder.ApplyConfiguration(new CityEntityConfig());
+            modelBuilder.ApplyConfiguration(new ZhanrEntityConfig());
+        }
+
         public DbSet<Member> Members { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Zhanr> Zhanrs { get; set; }
