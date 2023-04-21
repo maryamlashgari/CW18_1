@@ -45,7 +45,12 @@ namespace CW18_1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
                     b.HasKey("MemberId");
+
+                    b.HasIndex("CityId");
 
                     b.ToTable("Addresses");
 
@@ -53,12 +58,14 @@ namespace CW18_1.Migrations
                         new
                         {
                             MemberId = 1,
-                            Addresss = "Address1"
+                            Addresss = "Address1",
+                            CityId = 1
                         },
                         new
                         {
                             MemberId = 2,
-                            Addresss = "Address2"
+                            Addresss = "Address2",
+                            CityId = 2
                         });
                 });
 
@@ -86,8 +93,11 @@ namespace CW18_1.Migrations
 
             modelBuilder.Entity("CW18_1.Models.City", b =>
                 {
-                    b.Property<int>("AddressId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -96,7 +106,7 @@ namespace CW18_1.Migrations
                     b.Property<int>("StateId")
                         .HasColumnType("int");
 
-                    b.HasKey("AddressId");
+                    b.HasKey("Id");
 
                     b.HasIndex("StateId");
 
@@ -105,13 +115,13 @@ namespace CW18_1.Migrations
                     b.HasData(
                         new
                         {
-                            AddressId = 1,
+                            Id = 1,
                             Name = "City1",
                             StateId = 1
                         },
                         new
                         {
-                            AddressId = 2,
+                            Id = 2,
                             Name = "City2",
                             StateId = 2
                         });
@@ -227,11 +237,19 @@ namespace CW18_1.Migrations
 
             modelBuilder.Entity("CW18_1.Models.Address", b =>
                 {
+                    b.HasOne("CW18_1.Models.City", "City")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CW18_1.Models.Member", "Member")
                         .WithOne("Address")
                         .HasForeignKey("CW18_1.Models.Address", "MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("City");
 
                     b.Navigation("Member");
                 });
@@ -249,27 +267,18 @@ namespace CW18_1.Migrations
 
             modelBuilder.Entity("CW18_1.Models.City", b =>
                 {
-                    b.HasOne("CW18_1.Models.Address", "Address")
-                        .WithOne("City")
-                        .HasForeignKey("CW18_1.Models.City", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CW18_1.Models.State", "State")
                         .WithMany("Cities")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
-
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("CW18_1.Models.Address", b =>
+            modelBuilder.Entity("CW18_1.Models.City", b =>
                 {
-                    b.Navigation("City")
-                        .IsRequired();
+                    b.Navigation("Addresses");
                 });
 
             modelBuilder.Entity("CW18_1.Models.Member", b =>

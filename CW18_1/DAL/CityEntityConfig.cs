@@ -10,9 +10,9 @@ namespace CW18_1.DAL
         public void Configure(EntityTypeBuilder<City> builder)
         {
 
-            builder.HasOne(e => e.Address)
+            builder.HasMany(c => c.Addresses)
            .WithOne(e => e.City)
-           .HasForeignKey<City>(e => e.AddressId);
+           .HasForeignKey(c => c.CityId);
 
             //builder.HasData(new City
             //{
@@ -23,8 +23,8 @@ namespace CW18_1.DAL
             //});
 
             builder.HasData(
-                new City {Name = "City1", AddressId = 1, StateId = 1 },
-                new City {Name = "City2", AddressId = 2, StateId = 2 });
+                new City { Id = 1, Name = "City1", StateId = 1 },
+                new City { Id = 2, Name = "City2", StateId = 2 });
         }
     }
 }

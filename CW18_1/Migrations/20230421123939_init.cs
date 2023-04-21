@@ -53,19 +53,21 @@ namespace CW18_1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "Cities",
                 columns: table => new
                 {
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    Addresss = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.MemberId);
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Addresses_Members_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "Members",
+                        name: "FK_Cities_States_StateId",
+                        column: x => x.StateId,
+                        principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -91,26 +93,26 @@ namespace CW18_1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cities",
+                name: "Addresses",
                 columns: table => new
                 {
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StateId = table.Column<int>(type: "int", nullable: false)
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    Addresss = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cities", x => x.AddressId);
+                    table.PrimaryKey("PK_Addresses", x => x.MemberId);
                     table.ForeignKey(
-                        name: "FK_Cities_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "MemberId",
+                        name: "FK_Addresses_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cities_States_StateId",
-                        column: x => x.StateId,
-                        principalTable: "States",
+                        name: "FK_Addresses_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -167,22 +169,27 @@ namespace CW18_1.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "MemberId", "Addresss" },
-                values: new object[,]
-                {
-                    { 1, "Address1" },
-                    { 2, "Address2" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Cities",
-                columns: new[] { "AddressId", "Name", "StateId" },
+                columns: new[] { "Id", "Name", "StateId" },
                 values: new object[,]
                 {
                     { 1, "City1", 1 },
                     { 2, "City2", 2 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "MemberId", "Addresss", "CityId" },
+                values: new object[,]
+                {
+                    { 1, "Address1", 1 },
+                    { 2, "Address2", 2 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Addresses_CityId",
+                table: "Addresses",
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookMember_MembersId",
@@ -204,6 +211,9 @@ namespace CW18_1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
                 name: "BookMember");
 
             migrationBuilder.DropTable(
@@ -213,16 +223,13 @@ namespace CW18_1.Migrations
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Addresses");
+                name: "Members");
 
             migrationBuilder.DropTable(
                 name: "States");
 
             migrationBuilder.DropTable(
                 name: "Zhanrs");
-
-            migrationBuilder.DropTable(
-                name: "Members");
         }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model List<CW18_1.Models.Dtos.MemberGroupByStateDto>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>اسم استان</th>
+            <th>اسامی کاربران</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.StateName</td>
+                <td>
+                    <ul>
+                        @foreach (var member in item.Members)
+                        {
+                            <li>@member.FirstName @member.LastName</li>
+
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

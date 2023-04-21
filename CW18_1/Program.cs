@@ -1,4 +1,5 @@
 using CW18_1.DAL;
+using CW18_1.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ILibraryRepository, LibraryRepository>();
 
 builder.Services.AddDbContext<AppDBContext>(option =>
 

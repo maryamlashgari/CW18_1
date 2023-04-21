@@ -22,8 +22,8 @@ namespace CW18_1.DAL
             //});
 
             builder.HasData(
-                new Address { Addresss = "Address1", MemberId = 1 },
-                new Address { Addresss = "Address2", MemberId = 2 }
+                new Address { Addresss = "Address1", MemberId = 1, CityId = 1 },
+                new Address { Addresss = "Address2", MemberId = 2, CityId = 2 }
                 );
 
 

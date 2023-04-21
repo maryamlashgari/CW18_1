@@ -11,5 +11,6 @@ namespace CW18_1.Models
         public int MemberId { get; set; }
         public Member Member { get; set; }
         public City City { get; set; }
+        public int CityId { get; set; }
     }
 }
